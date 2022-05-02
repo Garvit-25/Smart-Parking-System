@@ -3,15 +3,14 @@ from flask_login import UserMixin
 
 @login_manager.user_loader
 def load_user(user_id):
-	print('MADARCHOD')
 	query = 'Select * from User where id='+str(user_id) + ';'
 	cursor.execute(query)
 	print(query)
 	user = cursor.fetchall()
-	b = Behnchod(user[0][1],user[0][0],True)
-	return b
+	u = User(user[0][1],user[0][0],True)
+	return u
 
-class Behnchod(UserMixin):
+class User(UserMixin):
 	def __init__(self, name, id, active=True):
 		self.name = name
 		self.id = id

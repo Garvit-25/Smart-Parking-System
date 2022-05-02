@@ -2,7 +2,7 @@ from flask import render_template, url_for, redirect,request
 from parkingSystemAutomation import app, cursor, bcrypt
 from parkingSystemAutomation.forms import LoginForm,SignupForm
 from flask_login import login_user, current_user, logout_user, login_required
-from parkingSystemAutomation.models import Behnchod
+from parkingSystemAutomation.models import User
 
 @app.route('/')
 @app.route('/index')
@@ -19,21 +19,18 @@ def login():
     #     if request.form.get('action') == 'value':
     #         print("Hello")
     #     else:
-    #         print("Fuck")
+    #         print("No")
     # else:
     #     print("bchxjdbsjakz")
 
     if form.validate_on_submit():
-        print("Hiii")
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        print(hashed_password)
         query = 'Select * from User where username="'+str(form.username.data) + '\";'
         cursor.execute(query)
         user = cursor.fetchall()
-        print(user[0][1])
         if user and bcrypt.check_password_hash(user[0][4], form.password.data):
-            b = Behnchod(user[0][1], user[0][0], True)
-            login_user(b)
+            u = User(user[0][1], user[0][0], True)
+            login_user(u)
             next_page = request.args.get('next')            
             return redirect(next_page) if next_page else redirect(url_for('index'))
         else:
@@ -49,7 +46,7 @@ def signup():
     #     if request.form.get('action') == 'value':
     #         print("Hello")
     #     else:
-    #         print("Fuck")
+    #         print("No")
     # else:
     #     print("bchxjdbsjakz")
 
@@ -58,16 +55,10 @@ def signup():
         
         #user = User(username=form.username.data, email=form.email.data, password=hashed_password, occupation=form.occupation.data)
         query = 'Insert into User (username,email,plate_number,password) values("' + str(form.username.data) + '","' + str(form.email.data) + '","' + str(form.license_plate_number.data) + '","' +str(hashed_password) + '");'
-        print(query)
         cursor.execute(query)
         #flash('Your Account Has Been Successfully Created. Now you can Log In', 'success')
         return redirect(url_for('login'))
     return render_template('signup.html',form = form)
-
-@app.route('/login2/',methods=['GET','POST'])
-def login2():
-    print("maa ki chut")
-    return render_template('index.html')
 
 
 
