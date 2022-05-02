@@ -1,0 +1,88 @@
+{% extends "material/base.html" %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<div class="parallax-container">
+    <div class="parallax"><img src="{{ url_for('static', filename='images/parkingDay.jpg') }}" class="responsive-img"></div>
+</div>
+<div class="section blue-grey">
+    <div class="row container">
+        <div class="row valign-wrapper">
+            <div class="col m5">
+                <img class="responsive-img circle" src="{{ url_for('static', filename='images/logo-bg.png') }}">
+              </div>
+            <div class="col m2"> 
+            </div>
+            
+            <div class="col l6">
+              <div class="card blue-grey darken-1">
+                <div class="card-content white-text log">
+                  <span class="card-title">Login</span>
+                  <div class="row">
+                    <form class="col s12" method="POST" action="/login">
+                        {{ form.hidden_tag() }}
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <i class="material-icons prefix">account_circle</i>
+                          <!-- <input id="icon_prefix" type="text" class="validate"> -->
+                           {{ form.username(id="icon_prefix", class="validate", required=required,type = "text") }}
+
+                          <label for="icon_prefix">User Name</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                          <i class="material-icons prefix">key</i>
+                          <!-- <input id="icon_key" type="password" class="validate"> -->
+                          {{ form.password(id="icon_key", class="validate", required=required,type="password") }}
+
+                          <label for="icon_key">Password</label>
+                        </div>
+                      </div>
+
+                      <div class="card-action log">
+                    <div class="row">
+                        <!-- <button class = "btn waves-effect waves-light large"> -->
+                             
+                             
+                        <!-- </button> -->
+                        <button class="btn waves-effect waves-light large" type="submit" name="action" value="value">Login
+                            <i class="material-icons right">login</i>
+                          </button>
+                          
+                        </div>
+                    <div class="row"> 
+                    <a href="#" class="s2">New here, Sign-up Now</a>
+                  </div>
+                </div>
+
+                    </form>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+   </div>
+</div>
+<div class="parallax-container">
+  <div class="parallax"><img src="{{ url_for('static', filename='images/parkingNight.jpg') }}" class="responsive-img"></div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{{ super() }}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.parallax').parallax()
+    });
+</script>
+{% endblock %}
