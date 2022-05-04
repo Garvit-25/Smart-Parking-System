@@ -7,6 +7,7 @@ def load_user(user_id):
 	cursor.execute(query)
 	print(query)
 	user = cursor.fetchall()
+	print(user)
 	u = User(user[0][1],user[0][0],True)
 	return u
 

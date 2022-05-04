@@ -7,12 +7,11 @@ from flask_bcrypt import Bcrypt
 app = Flask(__name__)
 Material(app)
 db = pymysql.connect(
-        host= 'capstone.cnkzslk2pkyg.ap-south-1.rds.amazonaws.com', 
+        host= 'capstone.c50xdydbgtwl.ap-south-1.rds.amazonaws.com', 
         port = 3306,
         user = 'admin', 
         password = '12345678',
         db = 'capstone',
-        
         )
 
 app.config['SECRET_KEY'] = '968331509722a24aaca4a6ab62dea0cd'

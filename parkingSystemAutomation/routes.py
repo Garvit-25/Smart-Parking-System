@@ -1,5 +1,5 @@
 from flask import render_template, url_for, redirect,request
-from parkingSystemAutomation import app, cursor, bcrypt
+from parkingSystemAutomation import app, cursor, bcrypt,db
 from parkingSystemAutomation.forms import LoginForm,SignupForm
 from flask_login import login_user, current_user, logout_user, login_required
 from parkingSystemAutomation.models import User
@@ -7,7 +7,6 @@ from parkingSystemAutomation.models import User
 @app.route('/')
 @app.route('/index')
 def index():
-    # cursor.execute(create_table)
     return render_template('index.html')
 
 @app.route('/login',methods=['GET', 'POST'])
@@ -35,12 +34,13 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('index'))
         else:
            return render_template('login.html',form=form)
-        
-
     return render_template('login.html',form=form)
 
 @app.route('/signup',methods=['GET', 'POST'])
 def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
     form = SignupForm()
     # if request.method == 'POST':
     #     if request.form.get('action') == 'value':
@@ -55,10 +55,19 @@ def signup():
         
         #user = User(username=form.username.data, email=form.email.data, password=hashed_password, occupation=form.occupation.data)
         query = 'Insert into User (username,email,plate_number,password) values("' + str(form.username.data) + '","' + str(form.email.data) + '","' + str(form.license_plate_number.data) + '","' +str(hashed_password) + '");'
-        cursor.execute(query)
+        temp = cursor.execute(query)
+        print(temp)
+        db.commit()
         #flash('Your Account Has Been Successfully Created. Now you can Log In', 'success')
         return redirect(url_for('login'))
     return render_template('signup.html',form = form)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
 
 
 
@@ -120,7 +129,7 @@ def createdb():
     #     PRIMARY KEY(id),
     #     FOREIGN KEY (location_id) REFERENCES Location (location_id)
     #     );"""
-    #cursor.execute(create_table)
+    # cursor.execute(create_table)
     # cursor.execute(create_company_table)
     # cursor.execute(create_location_table)
     # cursor.execute(create_parking_table)

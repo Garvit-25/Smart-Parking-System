@@ -1,15 +1,220 @@
 {% extends "material/base.html" %}
+
+{% block styles %}
+{{ super() }}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
 {% block content %}
 
 <nav class="blue">
     <div class="nav-wrapper">
-        <a href="#" class="brand-logo"><img class="responsive-img circle" src="{{ url_for('static', filename='images/logo-bg-small.png') }}"></a>
+        <a href="{{url_for('index')}}" class="brand-logo">Logo</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="sass.html">Sass</a></li>
-        <li><a href="badges.html">Components</a></li>
-        <li><a href="collapsible.html">Logout</a></li>
+        <li><a href="book.html">Book</a></li>
+        <li><a href="about.html">About us</a></li>
+        {% if current_user.is_authenticated %}
+            <li><a href="{{url_for('logout')}}">Logout</a></li>
+        {% else %}
+        <li><a href="{{url_for('signup')}}">Signup</a></li>
+        <li><a href="{{url_for('login')}}">Login</a></li>
+        {% endif %}
         </ul>
     </div>
 </nav>
+
+<div class="parallax-container">
+      <div class="parallax"><img src="{{ url_for('static', filename='images/home_image1.jpg') }}" class="responsive-img"></div>
+    </div>
+    <div class="section teal lighten-4">
+      <div class="row container ">
+        <h2 class="header" style="margin: 0 0;">Our Mission</h2>
+        <div class="col s12">
+            <p class="grey-text text-darken-3 lighten-3">We are on a mission to empower people to get everywhere, easier and faster!
+            <br>
+        By designing better ways to find, reserve and pay for parking, We make life easier, our cities more accessible, and our world more connected.
+    </p>
+        </div>
+        
+      </div>
+  </div>
+
+  <div class="section white">
+      <div class="row container">
+          <h2 class="header" style="margin: 0 0;">Our Core Values</h2>
+      </div>
+    
+    <div class="row container">
+        
+            <div class="col s6" ><h5 class="header">Give Drivers the Right of Way</h5> <p align="justify">
+                We take the Hero in our name seriously, and we go the extra mile to make sure our drivers have an experience we're proud of.
+            </p>
+            </div>
+
+            <div class="col s6"> <h5 class="header">Drive Growth</h5><p align="justify">We venture outside our comfort zones to accelerate company and individual growth. With a desire to learn and willingness to teach, reflection on the losses as well as the wins, and sharing and seeking of candid feedback, we drive ourselves and the company forward.</p>
+            </div>
+    </div>
+
+    <div class="row container">
+        
+            <div class="col s6" ><h5 class="header">Fuel Relationships</h5><p align="justify">We believe strong relationships are the core of high-functioning teams. We build these relationships by intentionally getting to know one another, taking accountability for our work, showing vulnerability, and remembering that trust is a two-way street.</p>
+            </div>
+
+            <div class="col s6"><h5 class="header">Don't Get Stuck in Traffic</h5> <p align="justify">We believe in empowering people to use their unique voices to solve problems and find different routes to success. With the humility to ask for help, the flexibility to adapt, and the resilience to chart the uncharted, there are no limits to what can be achieved.</p>
+            </div>
+    </div>
+
+    <div class="row container">
+        
+            <div class="col s6" ><h5 class="header">Remember to Signal</h5> <p align="justify">
+                We all strive to do our part in communicating openly and honestly with each other in moments big and small. This means sharing ideas, keeping stakeholders informed, explaining the “why” behind decisions, and doing so with care.
+            </p>
+            </div>
+
+            <div class="col s6"><h5 class="header">Respect Fellow Drivers</h5> <p align="justify">We believe in respecting our fellow teammates and creating a safe space for people to get from here to there. This means listening, assuming positive intent, and seeking to understand different perspectives.</p>
+            </div>
+    </div>
+
+    <div class="row container">
+        
+            <div class="col s6" ><h5 class="header">Enjoy the Ride</h5> <p align="justify">
+                Laugh, feel the wind in your hair, and remember not to take yourself too seriously.
+            </p>
+            </div>
+    </div>  
+      
+</div>
+    <div class="parallax-container">
+      <div class="parallax"><img src="{{ url_for('static', filename='images/home_image2.jpg') }}" class="responsive-img"></div>
+    </div>
+
+    <div class="section white">
+      <div class="row container">
+        <h2 class="header">What we have delivered...</h2>
+        <p class="grey-text text-darken-3 lighten-3">Parallax is an effect where the background content or image in this case, is moved at a different speed than the foreground content while scrolling.</p>
+    </div>
+
+    <div class="row container">
+        <div class="col s4">
+            <div class="numbers">
+        <span class="numbers__window">
+            <span class="numbers__window__digit numbers__window__digit--1" data-fake="8642519073">8</span>
+        </span>
+        <span class="numbers__window">
+            <span class="numbers__window__digit numbers__window__digit--2" data-fake="5207186394">5</span>
+        </span>
+        <span class="numbers__window">
+            <span class="numbers__window__digit numbers__window__digit--3" data-fake="8395216407">2</span>
+        </span>
+    </div>
+        </div>
+
+        <div class="col s4">
+            <div class="numbers">
+        <span class="numbers__window">
+            <span class="abc numbers__window__digit--1" data-fake="8642519073">8</span>
+        </span>
+        <span class="numbers__window">
+            <span class="abc numbers__window__digit--2" data-fake="5207186394">5</span>
+        </span>
+        <span class="numbers__window">
+            <span class="abc numbers__window__digit--3" data-fake="8395216407">2</span>
+        </span>
+    </div>
+        </div>
+
+        <div class="col s4">
+            <div class="numbers">
+        <span class="numbers__window">
+            <span class="numbers__window__digit numbers__window__digit--1" data-fake="8642519073">8</span>
+        </span>
+        <span class="numbers__window">
+            <span class="numbers__window__digit numbers__window__digit--2" data-fake="5207186394">5</span>
+        </span>
+        <span class="numbers__window">
+            <span class="numbers__window__digit numbers__window__digit--3" data-fake="8395216407">2</span>
+        </span>
+    </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="parallax-container">
+      <div class="parallax"><img src="{{ url_for('static', filename='images/home_image3.jpg') }}" class="responsive-img"></div>
+    </div>
+
+    <div class="section white">
+      <div class="row container">
+        <h2 class="header">Parallax</h2>
+        <p class="grey-text text-darken-3 lighten-3">Parallax is an effect where the background content or image in this case, is moved at a different speed than the foreground content while scrolling.</p>
+      </div>
+    </div>
+    <div class="parallax-container">
+      <div class="parallax"><img src="{{ url_for('static', filename='images/home_image4.jpg') }}" class="responsive-img"></div>
+    </div>
+    <div class="section white">
+      <div class="row container">
+        <h2 class="header">Parallax</h2>
+        <p class="grey-text text-darken-3 lighten-3">Parallax is an effect where the background content or image in this case, is moved at a different speed than the foreground content while scrolling.</p>
+      </div>
+    </div>
+
+    <footer class="page-footer blue-grey darken-2">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">Contact us</h5>
+                <p class="grey-text text-lighten-4">Hostel M, Thapar University
+                    <br>
+                Patiala,147001
+                <br>
+                +91-9876543210</p>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Links</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="#!">About Us</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Facebook</a></li>  
+                  <li><a class="grey-text text-lighten-3" href="#!">Instagram</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Twitter</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+            © 2022 Copyright Text
+            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+            </div>
+          </div>
+        </footer>
+
+{% endblock %}
+
+{% block scripts %}
+
+{{ super() }}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.parallax').parallax()
+    });
+</script>
+
+<script type="text/javascript">
+    const observer = new IntersectionObserver(entries => {
+  // Loop over the entries
+  entries.forEach(entry => {
+    // If the element is visible
+    if (entry.isIntersecting) {
+      // Add the animation class
+      entry.target.classList.add('numbers__window__digit');
+    }
+  });
+});
+
+observer.observe(document.querySelector('.abc'));
+</script>
+
 
 {% endblock %}
