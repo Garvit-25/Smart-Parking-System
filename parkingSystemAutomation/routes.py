@@ -56,7 +56,7 @@ def signup():
         #user = User(username=form.username.data, email=form.email.data, password=hashed_password, occupation=form.occupation.data)
         query = 'Insert into User (username,email,plate_number,password) values("' + str(form.username.data) + '","' + str(form.email.data) + '","' + str(form.license_plate_number.data) + '","' +str(hashed_password) + '");'
         temp = cursor.execute(query)
-        print(temp)
+        # print(temp)
         db.commit()
         #flash('Your Account Has Been Successfully Created. Now you can Log In', 'success')
         return redirect(url_for('login'))
@@ -67,31 +67,6 @@ def signup():
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @app.route('/createDatabase8967')
 def createdb():

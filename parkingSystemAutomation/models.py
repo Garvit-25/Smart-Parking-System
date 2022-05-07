@@ -5,9 +5,9 @@ from flask_login import UserMixin
 def load_user(user_id):
 	query = 'Select * from User where id='+str(user_id) + ';'
 	cursor.execute(query)
-	print(query)
+	# print(query)
 	user = cursor.fetchall()
-	print(user)
+	# print(user)
 	u = User(user[0][1],user[0][0],True)
 	return u
 
