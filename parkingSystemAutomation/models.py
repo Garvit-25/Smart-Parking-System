@@ -20,7 +20,7 @@ class User(UserMixin):
 	def is_active(self):
 	# Here you should write whatever the code is
 	# that checks the database if your user is active
-		return self.active
+		return True
 
 	def is_anonymous(self):
 		return False
