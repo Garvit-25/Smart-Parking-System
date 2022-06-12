@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Mali&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 
 {% block content %}
@@ -26,22 +27,22 @@
                 <div class="card-content white-text log">
                   <span class="card-title">Login</span>
                   <div class="row">
-                    <form class="col s12" method="POST" action="/login">
+                    <form class="col s12" novalidate method="POST" action="/login">
                         {{ form.hidden_tag() }}
                       <div class="row">
                         <div class="input-field col s12">
-                          <i class="material-icons prefix">account_circle</i>
+                          <i class="material-icons outlined prefix">email</i>
                           <!-- <input id="icon_prefix" type="text" class="validate"> -->
-                           {{ form.username(id="icon_prefix", class="validate", required=required,type = "text") }}
+                           {{ form.email(id="icon_prefix",type = "email") }}
 
-                          <label for="icon_prefix">User Name</label>
+                          <label for="icon_prefix">Email</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
                           <i class="material-icons prefix">key</i>
                           <!-- <input id="icon_key" type="password" class="validate"> -->
-                          {{ form.password(id="icon_key", class="validate", required=required,type="password") }}
+                          {{ form.password(id="icon_key",type="password") }}
 
                           <label for="icon_key">Password</label>
                         </div>
@@ -53,14 +54,33 @@
                              
                              
                         <!-- </button> -->
-                        <button class="btn waves-effect waves-light large" type="submit" name="action" value="value">Login
+                        <div class="col s6">
+                            <button class="btn waves-effect waves-light large" type="submit" name="user" value="user_login">Login as User
                             <i class="material-icons right">login</i>
+                            </button>
+
+                        </div>
+                        <div class="col s6">
+                            <button class="btn waves-effect waves-light large" type="submit" name="admin" value="admin_login">Login as Admin
+                            <i class="material-icons right">login</i>
+                            </button>
+
+                        </div>
+                          
+                        </div>
+                        <div class="row">
+                            <p class="log" >OR</p>
+                            <br>
+                            <button class="btn waves-effect waves-light large" type="submit" name="google" value="login">Login With Google
+                            <i class="fa fa-google right" aria-hidden="true"></i>
                           </button>
+                          
                           
                         </div>
                     <div class="row"> 
-                    <a href="{{url_for('signup')}}" class="s2">New here, Sign-up Now</a>
-                    <p>dnenku</p>
+                    <a href="{{url_for('signup')}}" >New here, Sign-up Now</a>
+                    <!-- <p>bcjkebwskaj</p>
+                     -->
                     
                   </div>
                 </div>

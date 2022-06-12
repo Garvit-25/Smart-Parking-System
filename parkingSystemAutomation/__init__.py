@@ -8,11 +8,11 @@ from oauthlib.oauth2 import WebApplicationClient
 app = Flask(__name__)
 Material(app)
 db = pymysql.connect(
-        host= 'capstone.c50xdydbgtwl.ap-south-1.rds.amazonaws.com', 
+        host= 'pas.c50xdydbgtwl.ap-south-1.rds.amazonaws.com', 
         port = 3306,
         user = 'admin', 
         password = '12345678',
-        db = 'capstone',
+        db = 'pas',
         )
 
 app.config['SECRET_KEY'] = '968331509722a24aaca4a6ab62dea0cd'

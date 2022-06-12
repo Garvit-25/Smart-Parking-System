@@ -1,0 +1,165 @@
+{% extends "material/base.html" %}
+
+{% block styles %}
+{{ super() }}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mali&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+
+<nav class="indigo accent-1">
+    <div class="nav-wrapper">
+        <a href="{{url_for('index')}}" class="brand-logo">Logo</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="{{url_for('book')}}">Book</a></li>
+        <li><a href="{{url_for('about')}}">About us</a></li>
+        {% if current_user.is_authenticated %}
+            <li><a href="{{url_for('logout')}}">Logout</a></li>
+        {% else %}
+        <li><a href="{{url_for('signup')}}">Signup</a></li>
+        <li><a href="{{url_for('login')}}">Login</a></li>
+        {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<div class="section blue-grey lighten-3">
+	<div class='row'>
+	<div class='col s2'>
+		<br>
+		<img class="responsive-img circle" src="{{ url_for('static', filename='images/shanks.jpeg') }}">
+	</div>
+
+	<div class="col s10 ">
+		<div class="row">
+    <div class="col s12">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Garvit Nangia</span>
+          <p>Thapar Institute of Engineering and Technolgy.</p>
+          <p>Web Developer</p>
+        </div>
+        <div class="card-action">
+          <a href="#">LinkedIn <i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+          <a href="#">Github  <i class="fa fa-github" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+	</div>
+</div>
+</div>
+
+<div class="section blue-grey lighten-3">
+<div class='row'>
+	<div class="col s10 ">
+		<div class="row">
+    <div class="col s12">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Gaurang Agrawal</span>
+          <p>Thapar Institute of Engineering and Technolgy.</p>
+          <p>Web Developer</p>
+        </div>
+        <div class="card-action">
+          <a href="#">LinkedIn <i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+          <a href="#">Github  <i class="fa fa-github" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+	</div>
+
+	<div class='col s2'>
+		<br>
+		<img class="responsive-img circle" src="{{ url_for('static', filename='images/shanks.jpeg') }}">
+	</div>
+</div>
+</div>
+
+<div class="section blue-grey lighten-3">
+<div class='row'>
+	<div class='col s2'>
+		<br>
+		<img class="responsive-img circle" src="{{ url_for('static', filename='images/shanks.jpeg') }}">
+	</div>
+
+	<div class="col s10 ">
+		<div class="row">
+    <div class="col s12">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Hemant Garg</span>
+          <p>Thapar Institute of Engineering and Technolgy.</p>
+          <p>Web Developer</p>
+        </div>
+        <div class="card-action">
+          <a href="#">LinkedIn <i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+          <a href="#">Github  <i class="fa fa-github" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+	</div>
+</div>
+</div>
+
+<div class="section blue-grey lighten-3">
+<div class='row'>
+	<div class="col s10 ">
+		<div class="row">
+    <div class="col s12">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Samarth</span>
+          <p>Thapar Institute of Engineering and Technolgy.</p>
+          <p>Web Developer</p>
+        </div>
+        <div class="card-action">
+          <a href="#">LinkedIn <i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+          <a href="#">Github  <i class="fa fa-github" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+	</div>
+
+	<div class='col s2'>
+		<br>
+		<img class="responsive-img circle" src="{{ url_for('static', filename='images/shanks.jpeg') }}">
+	</div>
+</div>
+</div>
+
+<footer class="page-footer blue-grey darken-1">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">Contact us</h5>
+                <p class="grey-text text-lighten-4">Hostel M, Thapar University
+                    <br>
+                Patiala,147001
+                <br>
+                +91-9876543210</p>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Links</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="#!">About Us</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Facebook</a></li>  
+                  <li><a class="grey-text text-lighten-3" href="#!">Instagram</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Twitter</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+            © 2022 Copyright Text
+            </div>
+          </div>
+        </footer>
+
+{% endblock %}

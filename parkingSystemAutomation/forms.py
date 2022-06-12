@@ -5,7 +5,7 @@ from flask_wtf.file import FileField,FileAllowed
 from markupsafe import Markup
 
 class LoginForm(FlaskForm):
-	username = StringField('Username', validators=[DataRequired()])
+	email = StringField('Email', validators=[DataRequired()])
 	password = PasswordField('Password', validators=[DataRequired()])
 	# submit_value = Markup('<i class="material-icons right">login</i>')
 	
@@ -15,7 +15,6 @@ class SignupForm(FlaskForm):
 	email = StringField('Email', validators=[DataRequired(), Email()])
 	password = PasswordField('Password', validators=[DataRequired()])
 	confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-	license_plate_number = StringField('License Plate Number',validators=[DataRequired()])
 
     # def validate_username(self, username):
     #     user = User.query.filter_by(username=username.data).first()

@@ -1,10 +1,11 @@
-from flask import render_template, url_for, redirect,request
+from flask import render_template, url_for, redirect,request, abort
 from parkingSystemAutomation import app, cursor, bcrypt, db, client, GOOGLE_DISCOVERY_URL, GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID
 from parkingSystemAutomation.forms import LoginForm,SignupForm
 from flask_login import login_user, current_user, logout_user, login_required
 from parkingSystemAutomation.models import User
 import json
 import requests
+from functools import wraps
 
 @app.route('/')
 @app.route('/index')
@@ -16,32 +17,42 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
-    # if request.method == 'POST':
-    #     if request.form.get('action') == 'value':
-    #         print("Hello")
-    #     else:
-    #         print("No")
-    # else:
-    #     print("bchxjdbsjakz")
-
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        query = 'Select * from User where username="'+str(form.username.data) + '\";'
-        cursor.execute(query)
-        user = cursor.fetchall()
-        if user and bcrypt.check_password_hash(user[0][4], form.password.data):
-            u = User(user[0][1], user[0][0], True)
-            login_user(u)
-            next_page = request.args.get('next')            
-            return redirect(next_page) if next_page else redirect(url_for('index'))
-        else:
-           return render_template('login.html',form=form)
+    if request.method == 'POST':
+        if request.form.get('google') == 'login':
+            return redirect('login_google')
+        elif request.form.get('user') == 'user_login':
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            query = 'Select * from User where email="'+str(form.email.data) + '\";'
+            cursor.execute(query)
+            user = cursor.fetchall()
+            if user and bcrypt.check_password_hash(user[0][3], form.password.data):
+                company = User(user[0][0], user[0][1], user[0][2], True)
+                login_user(company)
+                next_page = request.args.get('next')            
+                return redirect(next_page) if next_page else redirect(url_for('index'))
+            else:
+               return render_template('login.html',form=form)
+        elif request.form.get('admin') == 'admin_login':
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            print('hello1')
+            query = 'Select * from Company where company_email="'+str(form.email.data) + '\";'
+            cursor.execute(query)
+            user = cursor.fetchall()
+            print(user)
+            if user and bcrypt.check_password_hash(user[0][3], form.password.data):
+                u = User(user[0][0], user[0][1], user[0][2], True, True)
+                login_user(u)
+                print('hello2')
+                next_page = request.args.get('next')            
+                return redirect(next_page) if next_page else redirect(url_for('index'))
+            else:
+               return render_template('login.html',form=form)
     return render_template('login.html',form=form)
 
 @app.route('/signup',methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
 
     form = SignupForm()
     # if request.method == 'POST':
@@ -56,7 +67,7 @@ def signup():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         
         #user = User(username=form.username.data, email=form.email.data, password=hashed_password, occupation=form.occupation.data)
-        query = 'Insert into User (username,email,plate_number,password) values("' + str(form.username.data) + '","' + str(form.email.data) + '","' + str(form.license_plate_number.data) + '","' +str(hashed_password) + '");'
+        query = 'Insert into User (username,email,password) values("' + str(form.username.data) + '","' + str(form.email.data) + '","' +str(hashed_password) + '");'
         temp = cursor.execute(query)
         db.commit()
         return redirect(url_for('login'))
@@ -66,49 +77,70 @@ def signup():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index2'))
+    return redirect(url_for('login'))
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/book')
+@login_required
+def book():
+    return render_template('book.html')
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kws):
+        if current_user.is_authenticated:
+            if current_user.is_admin:
+                return f(*args, **kws)
+            else:
+                abort(405)
+        else:
+            abort(403)
+    return decorated_function
 
 @app.route('/createDatabase8967')
+@admin_required
 def createdb():
-    # create_table = """Create table User (
-    #     id int(10) NOT NULL UNIQUE AUTO_INCREMENT,
-    #     username varchar(60) NOT NULL UNIQUE, 
-    #     email varchar(60) NOT NULL UNIQUE, 
-    #     plate_number varchar(10) NOT NULL UNIQUE, 
-    #     password varchar(256) NOT NULL, 
-    #     PRIMARY KEY(id)
-    #     );"""
-    # create_location_table = """Create table Location (
-    #     location_id int(10) NOT NULL UNIQUE AUTO_INCREMENT, 
-    #     company_id int(10) NOT NULL, 
-    #     location varchar(256) NOT NULL UNIQUE, 
-    #     PRIMARY KEY(location_id),
-    #     FOREIGN KEY (company_id) REFERENCES Company (company_id)
-    #     );"""
+    create_table = """Create table User (
+        id int(10) NOT NULL UNIQUE AUTO_INCREMENT,
+        username varchar(60) NOT NULL, 
+        email varchar(60) NOT NULL UNIQUE, 
+        password varchar(256) , 
+        PRIMARY KEY(id)
+        );"""
+    create_location_table = """Create table Location (
+        location_id int(10) NOT NULL UNIQUE AUTO_INCREMENT, 
+        company_id int(10) NOT NULL, 
+        location varchar(256) NOT NULL UNIQUE, 
+        PRIMARY KEY(location_id),
+        FOREIGN KEY (company_id) REFERENCES Company (company_id)
+        );"""
 
-    # create_company_table = """Create table Company (
-    #     company_id int(10) NOT NULL UNIQUE AUTO_INCREMENT, 
-    #     company_name varchar(60) NOT NULL UNIQUE,
-    #     company_email varchar(60) NOT NULL UNIQUE, 
-    #     password varchar(256) NOT NULL, 
-    #     PRIMARY KEY(company_id)
-    #     );"""
-    # create_parking_table = """Create table ParkingLot (
-    #     id int(10) NOT NULL UNIQUE AUTO_INCREMENT, 
-    #     level int(3) NOT NULL, 
-    #     slot_no int(10) NOT NULL, 
-    #     slot_area_name varchar(10) NOT NULL,
-    #     in_time timestamp NOT NULL, 
-    #     out_time timestamp NOT NULL, 
-    #     location_id int(10) NOT NULL,
-    #     PRIMARY KEY(id),
-    #     FOREIGN KEY (location_id) REFERENCES Location (location_id)
-    #     );"""
-    # cursor.execute(create_table)
-    # cursor.execute(create_company_table)
-    # cursor.execute(create_location_table)
-    # cursor.execute(create_parking_table)
-    return redirect(url_for('login'))
+    create_company_table = """Create table Company (
+        company_id int(10) NOT NULL UNIQUE AUTO_INCREMENT, 
+        company_name varchar(60) NOT NULL UNIQUE,
+        company_email varchar(60) NOT NULL UNIQUE, 
+        password varchar(256) NOT NULL, 
+        PRIMARY KEY(company_id)
+        );"""
+    create_parking_table = """Create table ParkingLot (
+        id int(10) NOT NULL UNIQUE AUTO_INCREMENT, 
+        level int(3) NOT NULL, 
+        slot_no int(10) NOT NULL, 
+        slot_area_name varchar(10) NOT NULL,
+        in_time timestamp NOT NULL, 
+        out_time timestamp NOT NULL, 
+        location_id int(10) NOT NULL,
+        PRIMARY KEY(id),
+        FOREIGN KEY (location_id) REFERENCES Location (location_id)
+        );"""
+    cursor.execute(create_table)
+    cursor.execute(create_company_table)
+    cursor.execute(create_location_table)
+    cursor.execute(create_parking_table)
+    return redirect(url_for('signup'))
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
@@ -162,19 +194,20 @@ def callback():
         return "User email not available or not verified by Google.", 400
 
     # Doesn't exist? Add it to the database.
-    query = 'Select * from User where username="'+users_name + '\";'
+    query = 'Select * from User where email="'+users_email + '\";'
     cursor.execute(query)
     user = cursor.fetchall()
     if not user:
-        query = 'Insert into User (username,email,plate_number,password) values("' + users_name + '","' + users_email + '","' + "212122" + '","' +"21212312121212" + '");'
+        query = 'Insert into User (username,email) values("' + users_name + '","' + users_email + '");'
         temp = cursor.execute(query)
         db.commit()
-    query = 'Select * from User where username="'+users_name + '\";'
+    query = 'Select * from User where email="'+users_email + '\";'
     cursor.execute(query)
     user = cursor.fetchall()
-    u = User(user[0][1], user[0][0], True)
+    u = User(user[0][0], user[0][1], user[0][2], True)
     # Begin user session by logging the user in
     login_user(u)
 
     # Send user back to homepage
     return redirect(url_for("index"))
+
