@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField,SelectField,IntegerField,DecimalField,DateTimeField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_wtf.file import FileField,FileAllowed
 from markupsafe import Markup
@@ -25,4 +25,10 @@ class SignupForm(FlaskForm):
     #     user = User.query.filter_by(email=email.data).first()
     #     if user:
     #         raise ValidationError('Sorry this email is taken, Please choose another one')
+
+class BookingForm(FlaskForm):
+	location = SelectField(u'Group', coerce=int,validators=[DataRequired()])
+	in_time = DateTimeField()
+	hours =  DecimalField('Number of hours you want to stay',places=1,rounding=None,validators=[DataRequired()])
+	slots = IntegerField('Number of slots you wish to book',validators=[DataRequired()])
 

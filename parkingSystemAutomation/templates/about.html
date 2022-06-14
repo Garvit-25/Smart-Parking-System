@@ -18,7 +18,7 @@
         {% if current_user.is_authenticated %}
             <li><a href="{{url_for('logout')}}">Logout</a></li>
         {% else %}
-        <li><a href="{{url_for('signup')}}">Signup</a></li>
+        <li><a href="{{url_for('signup')}}">Signup </a></li>
         <li><a href="{{url_for('login')}}">Login</a></li>
         {% endif %}
         </ul>
@@ -133,6 +133,7 @@
 </div>
 </div>
 
+<div class="section blue-grey lighten-3">
 <footer class="page-footer blue-grey darken-1">
           <div class="container">
             <div class="row">
@@ -161,5 +162,5 @@
             </div>
           </div>
         </footer>
-
+</div>
 {% endblock %}

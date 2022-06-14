@@ -1,0 +1,14 @@
+
+.log {
+    text-align: center;
+}
+
+.clr{
+    color: #ffab40;
+}
+
+.set{
+   background-image: url('/static/images/bg.png') ;
+   background-size: auto;
+}
+

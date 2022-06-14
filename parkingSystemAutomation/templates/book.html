@@ -2,9 +2,33 @@
 
 {% block styles %}
 {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/book.css') }}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Mali&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script type="text/javascript">
+ 
+ $(".button-collapse").sideNav();
+ 
+</script>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, options);
+  });
+
+</script>
+
+<script type="text/javascript">
+    $('select').material_select(); 
+</script>
+
 {% endblock %}
 
 {% block content %}
@@ -12,7 +36,8 @@
 <nav class="indigo accent-1">
     <div class="nav-wrapper">
         <a href="{{url_for('index')}}" class="brand-logo">Logo</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
         <li><a href="{{url_for('book')}}">Book</a></li>
         <li><a href="{{url_for('about')}}">About us</a></li>
         {% if current_user.is_authenticated %}
@@ -22,7 +47,108 @@
         <li><a href="{{url_for('login')}}">Login</a></li>
         {% endif %}
         </ul>
+
+        <ul id="nav-mobile" class="side-nav">
+        <li><a href="{{url_for('book')}}">Book</a></li>
+        <li><a href="{{url_for('about')}}">About us</a></li>
+        {% if current_user.is_authenticated %}
+            <li><a href="{{url_for('logout')}}">Logout</a></li>
+        {% else %}
+        <li><a href="{{url_for('signup')}}">Signup</a></li>
+        <li><a href="{{url_for('login')}}">Login</a></li>
+        {% endif %}
+        </ul>
+
     </div>
 </nav>
+<br>
+
+<div class="set">
+    <div class="row">
+    <div class="col s8 offset-s2">
+      <div class="card transparent">
+        <div class="card-content log">
+          <span class="card-title black-text">Booking Details</span>
+          
+        </div>
+        <div class="row">
+                    <form class="col s12" novalidate method="POST" action="/book">
+                        {{ form.hidden_tag() }}
+                      <div class="row">
+                          <div class="input-field col s12 black-text">
+                            <select>
+                              <option value="" disabled selected>Select a location</option>
+                            {% for choice in form.location.choices %}
+                              <option value={{ choice[0] }}>{{ choice[1] }}</option>
+                            {% endfor %}
+                            </select>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="input-field col s12 black-text">
+                          <i class="material-icons prefix">schedule</i>
+                          <!-- <input id="icon_prefix" type="text" class="validate"> -->
+                          {{ form.hours(id="icon_prefix",type="text") }}
+                          <label for="icon_prefix">No of hours you want to stay</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 black-text">
+                          <i class="material-icons prefix">pin</i>
+                          <!-- <input id="icon_key" type="text" class="validate"> -->
+                          {{ form.slots(id="icon_key",type="text") }}
+                          <label for="icon_key">No of slots you want to book</label>
+                        </div>
+                      </div>
+
+                      <div class="card-action log">
+                    <div class="row">
+                        <div class="col s12">
+                            <button class="btn waves-effect waves-light large black-text" type="submit" name="book_button" value="book">Reserve
+                            <i class="material-icons right">book_online</i>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<footer class="page-footer blue-grey darken-1">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">Contact us</h5>
+                <p class="grey-text text-lighten-4">Hostel M, Thapar University
+                    <br>
+                Patiala,147001
+                <br>
+                +91-9876543210</p>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Links</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="#!">About Us</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Facebook</a></li>  
+                  <li><a class="grey-text text-lighten-3" href="#!">Instagram</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Twitter</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+            © 2022 Copyright Text
+            </div>
+          </div>
+        </footer>
 
 {% endblock %}
+
+
+

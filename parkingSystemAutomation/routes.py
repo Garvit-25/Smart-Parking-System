@@ -1,6 +1,6 @@
 from flask import render_template, url_for, redirect,request, abort
 from parkingSystemAutomation import app, cursor, bcrypt, db, client, GOOGLE_DISCOVERY_URL, GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID
-from parkingSystemAutomation.forms import LoginForm,SignupForm
+from parkingSystemAutomation.forms import LoginForm,SignupForm,BookingForm
 from flask_login import login_user, current_user, logout_user, login_required
 from parkingSystemAutomation.models import User
 import json
@@ -83,10 +83,24 @@ def logout():
 def about():
     return render_template('about.html')
 
-@app.route('/book')
+@app.route('/book',methods=['GET','POST'])
 @login_required
 def book():
-    return render_template('book.html')
+    form = BookingForm()
+    sql = "Select * from Location order by location;"
+    cursor.execute(sql)
+    choice = cursor.fetchall()
+    form.location.choices = [(c[0],c[2]) for c in choice]
+    if request.method == 'POST':
+        if request.form.get('book_button') == 'book':
+            # sql = 'Insert into Booking (location_id,id,slots,in_time,hours) values(' + str(form.location.data)
+            print(form.location.choices)
+            return redirect(url_for('index'))
+
+    
+    # print(form.location.choices)
+    return render_template('book.html',form = form)
+
 
 def admin_required(f):
     @wraps(f)
@@ -136,10 +150,23 @@ def createdb():
         PRIMARY KEY(id),
         FOREIGN KEY (location_id) REFERENCES Location (location_id)
         );"""
-    cursor.execute(create_table)
-    cursor.execute(create_company_table)
-    cursor.execute(create_location_table)
-    cursor.execute(create_parking_table)
+
+    create_booking_table = """Create Table Booking(
+    booking_id int(10) NOT NULL UNIQUE AUTO_INCREMENT,
+    location_id int(10) NOT NULL,
+    id int(10) NOT NULL,
+    slots int(2) NOT NULL,
+    hours float(5,1) NOT NULL,
+    in_time timestamp NOT NULL,
+    PRIMARY KEY(booking_id),
+    FOREIGN KEY (location_id) REFERENCES Location (location_id),
+    FOREIGN KEY (id) REFERENCES User (id)
+    ) """
+    # cursor.execute(create_table)
+    # cursor.execute(create_company_table)
+    # cursor.execute(create_location_table)
+    # cursor.execute(create_parking_table)
+    #cursor.execute(create_booking_table)
     return redirect(url_for('signup'))
 
 def get_google_provider_cfg():
@@ -210,4 +237,3 @@ def callback():
 
     # Send user back to homepage
     return redirect(url_for("index"))
-
