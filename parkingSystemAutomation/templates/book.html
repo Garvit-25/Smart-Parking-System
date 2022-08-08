@@ -63,10 +63,10 @@
 </nav>
 <br>
 
-<div class="set">
+<div >
     <div class="row">
     <div class="col s8 offset-s2">
-      <div class="card transparent">
+      <div class="card set">
         <div class="card-content log">
           <span class="card-title black-text">Booking Details</span>
           
@@ -76,10 +76,10 @@
                         {{ form.hidden_tag() }}
                       <div class="row">
                           <div class="input-field col s12 black-text">
-                            <select>
+                            <select name="selected_location">
                               <option value="" disabled selected>Select a location</option>
                             {% for choice in form.location.choices %}
-                              <option value={{ choice[0] }}>{{ choice[1] }}</option>
+                              <option value="{{ choice[0] }}">{{ choice[1] }}</option>
                             {% endfor %}
                             </select>
                           </div>

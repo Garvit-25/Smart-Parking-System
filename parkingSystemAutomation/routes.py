@@ -93,8 +93,11 @@ def book():
     form.location.choices = [(c[0],c[2]) for c in choice]
     if request.method == 'POST':
         if request.form.get('book_button') == 'book':
-            # sql = 'Insert into Booking (location_id,id,slots,in_time,hours) values(' + str(form.location.data)
-            print(form.location.choices)
+            selectedLoc = request.form.get('selected_location')
+            sql = "Insert into Booking (location_id,id,slots,in_time,hours) values(" + str(selectedLoc) +","+ str(current_user.id)+","+str(form.slots.data)+","+"0,"+str(form.hours.data)+ ');'
+            print(request.form.get('selected_location'))
+            temp=cursor.execute(sql)
+            db.commit()
             return redirect(url_for('index'))
 
     
@@ -166,7 +169,7 @@ def createdb():
     # cursor.execute(create_company_table)
     # cursor.execute(create_location_table)
     # cursor.execute(create_parking_table)
-    #cursor.execute(create_booking_table)
+    # cursor.execute(create_booking_table)
     return redirect(url_for('signup'))
 
 def get_google_provider_cfg():
