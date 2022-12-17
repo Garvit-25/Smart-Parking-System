@@ -6,6 +6,17 @@ from parkingSystemAutomation.models import User
 import json
 import requests
 from functools import wraps
+from datetime import datetime
+
+class bookObj:
+    def __init__(self,b_id,l_id,u_id,slots,hours,dt):
+        self.b_id=b_id
+        self.l_id=l_id
+        self.u_id=u_id
+        self.slots = slots
+        self.hours = int(hours)
+        self.dt = dt
+
 
 @app.route('/')
 @app.route('/index')
@@ -28,7 +39,7 @@ def login():
             if user and bcrypt.check_password_hash(user[0][3], form.password.data):
                 company = User(user[0][0], user[0][1], user[0][2], True)
                 login_user(company)
-                next_page = request.args.get('next')            
+                next_page = request.args.get('next')
                 return redirect(next_page) if next_page else redirect(url_for('index'))
             else:
                return render_template('login.html',form=form)
@@ -43,7 +54,7 @@ def login():
                 u = User(user[0][0], user[0][1], user[0][2], True, True)
                 login_user(u)
                 print('hello2')
-                next_page = request.args.get('next')            
+                next_page = request.args.get('next')
                 return redirect(next_page) if next_page else redirect(url_for('index'))
             else:
                return render_template('login.html',form=form)
@@ -65,7 +76,7 @@ def signup():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        
+
         #user = User(username=form.username.data, email=form.email.data, password=hashed_password, occupation=form.occupation.data)
         query = 'Insert into User (username,email,password) values("' + str(form.username.data) + '","' + str(form.email.data) + '","' +str(hashed_password) + '");'
         temp = cursor.execute(query)
@@ -83,6 +94,34 @@ def logout():
 def about():
     return render_template('about.html')
 
+@app.route('/account')
+@login_required
+def account():
+    print(current_user.id);
+    query = "Select * from Booking where id = " + str(current_user.id) + ";"
+    cursor.execute(query)
+    details = cursor.fetchall()
+    bookings = []
+    for i in range(0,len(details)):
+        dateString = details[i][5]
+        locId = details[i][1]
+        query = "Select * from Location where location_id="+str(locId)+";"
+        cursor.execute(query)
+        loc = cursor.fetchall()
+        loc = loc[0][2]
+        print(loc)
+        bId = details[i][0]
+        slots = details[i][3]
+        hours = details[i][4]
+        b = bookObj(bId,loc,current_user.id,slots,hours,dateString)
+        bookings.append(b)
+
+    #print(bookings)
+
+    #dateObj = datetime.strptime(dateString,'%Y-%m-%d %H:%M:%S')
+
+    return render_template("account.html",bookings=bookings)
+
 @app.route('/book',methods=['GET','POST'])
 @login_required
 def book():
@@ -94,13 +133,17 @@ def book():
     if request.method == 'POST':
         if request.form.get('book_button') == 'book':
             selectedLoc = request.form.get('selected_location')
-            sql = "Insert into Booking (location_id,id,slots,in_time,hours) values(" + str(selectedLoc) +","+ str(current_user.id)+","+str(form.slots.data)+","+"0,"+str(form.hours.data)+ ');'
-            print(request.form.get('selected_location'))
+            dt = request.form.get('in_time')
+            print(dt)
+            #date_time = dt.strftime("%m/%d/%Y, %H:%M")
+            #print(date_time)
+
+            sql = "Insert into Booking (location_id,id,slots,in_time,hours) values(" + str(selectedLoc) +","+ str(current_user.id)+","+str(form.slots.data)+","+dt+","+str(form.hours.data)+ ');'
             temp=cursor.execute(sql)
             db.commit()
             return redirect(url_for('index'))
 
-    
+
     # print(form.location.choices)
     return render_template('book.html',form = form)
 
@@ -122,33 +165,33 @@ def admin_required(f):
 def createdb():
     create_table = """Create table User (
         id int(10) NOT NULL UNIQUE AUTO_INCREMENT,
-        username varchar(60) NOT NULL, 
-        email varchar(60) NOT NULL UNIQUE, 
-        password varchar(256) , 
+        username varchar(60) NOT NULL,
+        email varchar(60) NOT NULL UNIQUE,
+        password varchar(256) ,
         PRIMARY KEY(id)
         );"""
     create_location_table = """Create table Location (
-        location_id int(10) NOT NULL UNIQUE AUTO_INCREMENT, 
-        company_id int(10) NOT NULL, 
-        location varchar(256) NOT NULL UNIQUE, 
+        location_id int(10) NOT NULL UNIQUE AUTO_INCREMENT,
+        company_id int(10) NOT NULL,
+        location varchar(256) NOT NULL UNIQUE,
         PRIMARY KEY(location_id),
         FOREIGN KEY (company_id) REFERENCES Company (company_id)
         );"""
 
     create_company_table = """Create table Company (
-        company_id int(10) NOT NULL UNIQUE AUTO_INCREMENT, 
+        company_id int(10) NOT NULL UNIQUE AUTO_INCREMENT,
         company_name varchar(60) NOT NULL UNIQUE,
-        company_email varchar(60) NOT NULL UNIQUE, 
-        password varchar(256) NOT NULL, 
+        company_email varchar(60) NOT NULL UNIQUE,
+        password varchar(256) NOT NULL,
         PRIMARY KEY(company_id)
         );"""
     create_parking_table = """Create table ParkingLot (
-        id int(10) NOT NULL UNIQUE AUTO_INCREMENT, 
-        level int(3) NOT NULL, 
-        slot_no int(10) NOT NULL, 
+        id int(10) NOT NULL UNIQUE AUTO_INCREMENT,
+        level int(3) NOT NULL,
+        slot_no int(10) NOT NULL,
         slot_area_name varchar(10) NOT NULL,
-        in_time timestamp NOT NULL, 
-        out_time timestamp NOT NULL, 
+        in_time timestamp NOT NULL,
+        out_time timestamp NOT NULL,
         location_id int(10) NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY (location_id) REFERENCES Location (location_id)
@@ -165,11 +208,11 @@ def createdb():
     FOREIGN KEY (location_id) REFERENCES Location (location_id),
     FOREIGN KEY (id) REFERENCES User (id)
     ) """
-    # cursor.execute(create_table)
-    # cursor.execute(create_company_table)
-    # cursor.execute(create_location_table)
-    # cursor.execute(create_parking_table)
-    # cursor.execute(create_booking_table)
+    cursor.execute(create_table)
+    cursor.execute(create_company_table)
+    cursor.execute(create_location_table)
+    cursor.execute(create_parking_table)
+    cursor.execute(create_booking_table)
     return redirect(url_for('signup'))
 
 def get_google_provider_cfg():

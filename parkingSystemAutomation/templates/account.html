@@ -1,0 +1,84 @@
+{% extends "material/base.html" %}
+{% block content %}
+
+<nav class="indigo accent-1">
+  <div class="nav-wrapper">
+    <a href="{{url_for('index')}}" class="brand-logo">Logo</a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a href="{{url_for('book')}}">Book</a></li>
+      <li><a href="{{url_for('about')}}">About us</a></li>
+      {% if current_user.is_authenticated %}
+      <li><a href="{{url_for('logout')}}">Logout</a></li>
+      {% else %}
+      <li><a href="{{url_for('signup')}}">Signup</a></li>
+      <li><a href="{{url_for('login')}}">Login</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+
+<div class="card">
+  <div class="card-content">
+    <h3>Welcome {{ current_user.username }}</h3>
+  </div>
+  <div class="card-tabs">
+    <ul class="tabs tabs-fixed-width">
+      <li class="tab"><a href="#active">Active Bookings</a></li>
+      <li class="tab"><a class="active" href="#recent">Recent Bookings</a></li>
+    </ul>
+  </div>
+  <div class="card-content grey lighten-4">
+    <div id="active">
+      {% for i in bookings %}
+      <div class="col s12 m7">
+
+        <div class="card horizontal">
+          <div class="card-stacked">
+            <div class="card-content">
+              <p>Location Name : {{i.l_id}}.</p>
+              <p>No of Slots Booked : {{i.slots}}</p>
+              <p>No of hours booked : {{i.hours}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div id="recent">
+
+    </div>
+
+  </div>
+</div>
+
+<footer class="page-footer blue-grey darken-2">
+  <div class="container">
+    <div class="row">
+      <div class="col l6 s12">
+        <h5 class="white-text">Contact us</h5>
+        <p class="grey-text text-lighten-4">Hostel M, Thapar University
+          <br>
+          Patiala,147001
+          <br>
+          +91-9876543210
+        </p>
+      </div>
+      <div class="col l4 offset-l2 s12">
+        <h5 class="white-text">Links</h5>
+        <ul>
+          <li><a class="grey-text text-lighten-3" href="#!">About Us</a></li>
+          <li><a class="grey-text text-lighten-3" href="#!">Facebook</a></li>
+          <li><a class="grey-text text-lighten-3" href="#!">Instagram</a></li>
+          <li><a class="grey-text text-lighten-3" href="#!">Twitter</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="container">
+      © 2022 Copyright Text
+    </div>
+  </div>
+</footer>
+
+{% endblock %}
