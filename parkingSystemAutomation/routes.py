@@ -101,26 +101,34 @@ def account():
     query = "Select * from Booking where id = " + str(current_user.id) + ";"
     cursor.execute(query)
     details = cursor.fetchall()
-    bookings = []
+    active = []
+    recent = []
+    now = datetime.now()
     for i in range(0,len(details)):
         dateString = details[i][5]
+
         locId = details[i][1]
         query = "Select * from Location where location_id="+str(locId)+";"
         cursor.execute(query)
         loc = cursor.fetchall()
         loc = loc[0][2]
-        print(loc)
+        #print(loc)
         bId = details[i][0]
         slots = details[i][3]
         hours = details[i][4]
-        b = bookObj(bId,loc,current_user.id,slots,hours,dateString)
-        bookings.append(b)
+        date_time = dateString.strftime("%m/%d/%Y, %H:%M:%S")
+        print(date_time)
+        b = bookObj(bId,loc,current_user.id,slots,hours,date_time)
+        if dateString>=now:
+            active.append(b)
+        else:
+            recent.append(b)
 
     #print(bookings)
 
     #dateObj = datetime.strptime(dateString,'%Y-%m-%d %H:%M:%S')
 
-    return render_template("account.html",bookings=bookings)
+    return render_template("account.html",active=active,recent=recent)
 
 @app.route('/book',methods=['GET','POST'])
 @login_required
@@ -134,10 +142,12 @@ def book():
         if request.form.get('book_button') == 'book':
             selectedLoc = request.form.get('selected_location')
             dt = request.form.get('in_time')
-            print(dt)
+
             #date_time = dt.strftime("%m/%d/%Y, %H:%M")
             #print(date_time)
 
+            dt = "'"+dt[:10] + " " + dt[11:] + ":00'"
+            print(dt)
             sql = "Insert into Booking (location_id,id,slots,in_time,hours) values(" + str(selectedLoc) +","+ str(current_user.id)+","+str(form.slots.data)+","+dt+","+str(form.hours.data)+ ');'
             temp=cursor.execute(sql)
             db.commit()
@@ -147,6 +157,18 @@ def book():
     # print(form.location.choices)
     return render_template('book.html',form = form)
 
+@app.route('/admin')
+def admin_home():
+    sql = "Select available from ParkingLot order by slot_no asc;"
+    cursor.execute(sql)
+    fetch = cursor.fetchall()
+    db.commit()
+    print(fetch)
+    slots = []
+    for i in fetch:
+        slots.append(int(i[0]))
+    print(slots)
+    return render_template('admin.html',slots=slots)
 
 def admin_required(f):
     @wraps(f)

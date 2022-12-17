@@ -11,3 +11,11 @@
    background-color: #DFF6FF;
    background-size: auto;
 }
+
+.pos{
+  position: absolute;
+  top: 5rem;
+  left: 5rem;
+  height: 100%;
+  width: 100%;
+}

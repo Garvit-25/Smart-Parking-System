@@ -8,82 +8,35 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 
-{% block scripts %}
-{{ super() }}
-<script src="http://gnuhacker.com/materialize.js">
-<script type="text/javascript">
-
- $(".button-collapse").sideNav();
-
-</script>
-
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.sidenav');
-    var instances = M.Sidenav.init(elems, options);
-  });
-
-</script>
-
-<script type="text/javascript">
-    $('select').material_select();
-</script>
-
-<script type="text/javascript">
-  var currYear = (new Date()).getFullYear();
-
-$(document).ready(function() {
-  $(".datepicker").datepicker({
-    defaultDate: new Date(currYear-5,1,31),
-    // setDefaultDate: new Date(2000,01,31),
-    maxDate: new Date(currYear-5,12,31),
-    yearRange: [1928, currYear-5],
-    format: "yyyy/mm/dd"
-  });
-});
-</script>
-
-{% endblock %}
-
 {% block content %}
 
 <nav class="indigo accent-1">
     <div class="nav-wrapper">
-        <a href="{{url_for('index')}}" class="brand-logo">Logo</a>
-        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-        <ul class="right hide-on-med-and-down">
+        <a href="{{url_for('index')}}" class="brand-logo"><img src="{{url_for('static',filename='images/logo1-small.png')}}" class="responsive-img"></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li><a href="{{url_for('book')}}">Book</a></li>
         <li><a href="{{url_for('about')}}">About us</a></li>
         {% if current_user.is_authenticated %}
             <li><a href="{{url_for('logout')}}">Logout</a></li>
+            <li><a href="{{url_for('account')}}">Account</a></li>
         {% else %}
         <li><a href="{{url_for('signup')}}">Signup</a></li>
         <li><a href="{{url_for('login')}}">Login</a></li>
         {% endif %}
         </ul>
-
-        <ul id="nav-mobile" class="side-nav">
-        <li><a href="{{url_for('book')}}">Book</a></li>
-        <li><a href="{{url_for('about')}}">About us</a></li>
-        {% if current_user.is_authenticated %}
-            <li><a href="{{url_for('logout')}}">Logout</a></li>
-        {% else %}
-        <li><a href="{{url_for('signup')}}">Signup</a></li>
-        <li><a href="{{url_for('login')}}">Login</a></li>
-        {% endif %}
-        </ul>
-
     </div>
 </nav>
-<br>
-
-<div >
+<main>
+<div class="parallax-container">
+      <div class="parallax"><img src="{{ url_for('static', filename='images/booking1.jpg') }}" class="responsive-img"></div>
+    </div>
+<div class="section pink lighten-5">
     <div class="row">
-    <div class="col s8 offset-s2">
-      <div class="card set">
-        <div class="card-content log">
-          <span class="card-title black-text">Booking Details</span>
 
+    <div class="col s6 offset-s3 ">
+      <div class="card set teal lighten-4 ">
+        <div class="card-content log ">
+          <span class="card-title black-text">Booking Details</span>
         </div>
         <div class="row">
                     <form class="col s12" novalidate method="POST" action="/book">
@@ -121,9 +74,6 @@ $(document).ready(function() {
                             {{ form.in_time(type="datetime-local",class="datepicker") }}
                           </div>
                         </div>
-
-
-
                       <div class="card-action log">
                     <div class="row">
                         <div class="col s12">
@@ -141,7 +91,13 @@ $(document).ready(function() {
   </div>
 </div>
 
+<div class="parallax-container">
+      <div class="parallax"><img src="{{ url_for('static', filename='images/booking.jpg') }}" class="responsive-img"></div>
+    </div>
 
+
+
+</main>
 
 <footer class="page-footer blue-grey darken-1">
           <div class="container">
@@ -172,5 +128,48 @@ $(document).ready(function() {
           </div>
         </footer>
 
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="http://gnuhacker.com/materialize.js">
+<script type="text/javascript">
+
+ $(".button-collapse").sideNav();
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.parallax').parallax()
+    });
+</script>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, options);
+  });
+
+</script>
+
+<script type="text/javascript">
+    $('select').material_select();
+</script>
+
+<script type="text/javascript">
+  var currYear = (new Date()).getFullYear();
+
+$(document).ready(function() {
+  $(".datepicker").datepicker({
+    defaultDate: new Date(currYear-5,1,31),
+    // setDefaultDate: new Date(2000,01,31),
+    maxDate: new Date(currYear-5,12,31),
+    yearRange: [1928, currYear-5],
+    format: "yyyy/mm/dd"
+  });
+});
+</script>
 
 {% endblock %}
