@@ -15,9 +15,9 @@ db = pymysql.connect(
         db = DB_NAME,
         )
 
-app.config['SECRET_KEY'] = '968331509722a24aaca4a6ab62dea0cd'
-GOOGLE_CLIENT_ID = "813361300800-pakcrlsju32gk2199no3kdqi2r3l8h48.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET = "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"
+app.config['SECRET_KEY'] = SECRET_KEY
+GOOGLE_CLIENT_ID = CLIENT_ID
+GOOGLE_CLIENT_SECRET = CLIENT_SECRET
 GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
